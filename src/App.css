@@ -87,3 +87,8 @@ input[type=time]::-webkit-clear-button {
   appearance: none;
   margin: -10px; 
 }
+
+.name p{
+  margin-left: 10px;
+  margin-right: 10px;
+}
