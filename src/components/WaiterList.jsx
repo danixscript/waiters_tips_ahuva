@@ -6,9 +6,6 @@ function WaiterList(props) {
     <div className="list grid">
       <h2>רשימת עובדים</h2>
       {props.list.map((e) => {
-            // var a = new Date("2024-07-13"+' ' + e.houer);
-            // var b = new Date("2024-07-13" +' '+ e.toHouer);
-            // var hours = Math.abs(b - a) / 36e5;
             var a = new Date("2024-07-13" + " " + e.houer);
             var b = new Date("2024-07-13" + " " + e.toHouer);
             // Check if end time is before start time, indicating it crosses midnight
@@ -16,12 +13,15 @@ function WaiterList(props) {
               b.setDate(b.getDate() + 1); // Add one day to the end time
             }
             var hours = Math.abs(b - a) / 36e5; 
+            var decimals = hours - Math.floor(hours);
             
 
+            // if(decimals < 0.5 ){
+            //   return decimals
+            // }else if(decimals > 0.5 || decimals<0.10){
 
-
+            // }
             
-
         return (
           <div className="name flexRow bet" key={props.name}>
             <h3> {e.name}</h3>

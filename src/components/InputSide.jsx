@@ -36,12 +36,12 @@ function clearWaiterState(){
 }
 
 
-function writeWaiterStartDate(e){
-  setWaiter({...waiter,dateStart:e.target.value})
-}
-function writeWaiterEndDate(e){
-  setWaiter({...waiter,dateEnd:e.target.value})
-}
+// function writeWaiterStartDate(e){
+//   setWaiter({...waiter,dateStart:e.target.value})
+// }
+// function writeWaiterEndDate(e){
+//   setWaiter({...waiter,dateEnd:e.target.value})
+// }
 
 
   return (
@@ -52,7 +52,7 @@ function writeWaiterEndDate(e){
      <div className="flexCol center">
 <div className="flexRowToCol center">
 <InputText func={writeWaiterName} valueW={waiter.name} type="שם " />  
- {/* <SelectComp personJob={personJob} /> */}
+ <SelectComp personJob={personJob} />
 
 </div>
 <div className="flexRowToCol">

@@ -26,7 +26,7 @@ function TipTable(props) {
       )}
 
       {props.TipMoneyForHour > 0 ? (
-        <p>טיפ לשעה אחרי הפרשה (-6):{props.TipMoneyForHour.toFixed(0)}</p>
+        <p>טיפ לשעה אחרי הפרשה :{props.TipMoneyForHour.toFixed(0)}</p>
       ) : (
         ""
       )}
@@ -37,7 +37,6 @@ function TipTable(props) {
             <TableCell align="right">סכום כסף</TableCell>
             <TableCell align="right"> שם המלצר</TableCell>
             <TableCell align="right"> משעה</TableCell>
-
             <TableCell align="right"> עד שעה</TableCell>
             <TableCell align="right"> משך שעות</TableCell>
             <TableCell align="right">סכום כסף</TableCell>

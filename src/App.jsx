@@ -3,8 +3,9 @@ import TipTable from "./components/TipTable";
 import InputSide from "./components/InputSide";
 // import WaiterList from "./components/WaiterList";
 import { useEffect, useState } from "react";
-// import WorkerTable from "./components/WorkerTable";
+import WorkerTable from "./components/WorkerTable";
 import PopUp from "./components/PopUp";
+import ButtonExel from "./components/ButtonExel";
 
 function App() {
   const [WaiterArray, setWaiterArray] = useState([]);
@@ -66,9 +67,7 @@ function App() {
     let sumCookHours = 0;
 
     for (let i = 0; i < WaiterArray.length; i++) {
-      // var a = new Date("2024-07-13" + " " + WaiterArray[i].houer);
-      // var b = new Date("2024-07-13" + " " + WaiterArray[i].toHouer);
-      // var hours = Math.abs(b - a) / 36e5;
+     
 
       var a = new Date("2024-07-13" + " " + WaiterArray[i].houer);
       var b = new Date("2024-07-13" + " " + WaiterArray[i].toHouer);
@@ -77,12 +76,11 @@ function App() {
       if (b < a) {
         b.setDate(b.getDate() + 1); // Add one day to the end time
       }
-      
       var hours = Math.abs(b - a) / 36e5; 
 
+     
 
-      
-      WaiterArray[i].job = "waiter";
+
       WaiterArray[i].sumHours = hours;
 
       if (WaiterArray[i].job == "waiter") {
@@ -149,11 +147,12 @@ function App() {
       <br />
       <br />
       <div className="w80">
-        {/* <WorkerTable array={TableWorkersArray} sumCookHoursState={sumCookHoursState} /> */}
+        <WorkerTable array={TableWorkersArray} sumCookHoursState={sumCookHoursState} />
       </div>
       <br />
       <br />
       <br />
+      <ButtonExel/>
       <br />
       <br />
       <footer>
