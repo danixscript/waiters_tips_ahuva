@@ -6,8 +6,12 @@ function WaiterList(props) {
     <div className="list grid">
       <h2>רשימת עובדים</h2>
       {props.list.map((e) => {
-            var a = new Date("2024-07-13" + " " + e.houer);
-            var b = new Date("2024-07-13" + " " + e.toHouer);
+           const date = new Date();
+           const year = date.getFullYear();
+           const month = String(date.getMonth() + 1).padStart(2, '0'); // getMonth() is zero-based
+           const day = String(date.getDate()).padStart(2, '0');
+            var a = new Date(`${year}-${month}-${day}` + " " + e.houer);
+            var b = new Date(`${year}-${month}-${day}` + " " + e.toHouer);
             // Check if end time is before start time, indicating it crosses midnight
             if (b < a) {
               b.setDate(b.getDate() + 1); // Add one day to the end time
