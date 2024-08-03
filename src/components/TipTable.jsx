@@ -40,7 +40,7 @@ function TipTable(props) {
             <TableCell align="right"> עד שעה</TableCell>
             <TableCell align="right"> משך שעות</TableCell>
             <TableCell align="right">סכום כסף</TableCell>
-            <TableCell align="right"> הפרשה </TableCell>
+           
           </TableRow>
         </TableHead>
         <TableBody>
@@ -61,7 +61,7 @@ function TipTable(props) {
               <TableCell align="right">
                 {Math.floor(props.TipMoneyForHour * row.sumHours)}
               </TableCell>
-              <TableCell align="right">{(row.sumHours*6).toFixed(2)}</TableCell>
+            
             </TableRow>
           ))}
         </TableBody>
