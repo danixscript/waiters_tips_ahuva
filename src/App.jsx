@@ -134,7 +134,7 @@ function App() {
     const title = 'טבלת עובדים';
 
     const pdfBlob = generatePDF(TableWorkersArray, columns, title);
-    sendPDFToWhatsApp(pdfBlob, '1234567890'); // Replace with the recipient's phone number
+    sendPDFToWhatsApp(pdfBlob, '+972534273529'); // Replace with the recipient's phone number
   };
 
   return (
