@@ -1,15 +1,15 @@
 import "./App.css";
 import TipTable from "./components/TipTable";
 import InputSide from "./components/InputSide";
-// import WaiterList from "./components/WaiterList";
-import { useEffect, useState } from "react";
 import WorkerTable from "./components/WorkerTable";
 import PopUp from "./components/PopUp";
 import ButtonExel from "./components/ButtonExel";
+import generatePDF from './components/GeneratePDF';
+import sendPDFToWhatsApp from './components/SendPDFToWhatsApp';
+import { useState } from "react";
 
 function App() {
   const [WaiterArray, setWaiterArray] = useState([]);
-  // const [WorkersArray, setWorkersArray] = useState([]);
   const [TableWorkersArray, setTableWorkersArray] = useState([]);
   const [TipMoney, setTipMoney] = useState(0);
   const [TipMoneyForHour, setTipMoneyForHour] = useState(0);
@@ -21,16 +21,15 @@ function App() {
   function waiterFilter(e) {
     let flag = false;
     for (let i = 0; i < WaiterArray.length; i++) {
-      if (e.name == WaiterArray[i].name) {
+      if (e.name === WaiterArray[i].name) {
         flag = true;
         setPopUp({ active: true, txt: "המלצר כבר קיים" });
         return;
       }
     }
-    if (e.name == "" || e.houer == "" || e.toHouer == "") {
+    if (e.name === "" || e.houer === "" || e.toHouer === "") {
       flag = true;
       setPopUp({ active: true, txt: "נא למלא את כל הפרטים" });
-
       return;
     }
     if (!flag) {
@@ -39,108 +38,76 @@ function App() {
   }
 
   function removeWaiter(e) {
-    console.log(e);
-
-    const arr = WaiterArray.filter((waiter) => {
-      return waiter.name != e;
-    });
+    const arr = WaiterArray.filter((waiter) => waiter.name !== e);
     setWaiterArray(arr);
   }
 
   function clearAll() {
     setWaiterArray([]);
   }
+
   function getMoneyTip(e) {
-    console.log(e);
     setTipMoney(e.target.value);
-    console.log(TipMoney);
   }
 
   function startCalc() {
     let arrTable = [];
     let workersTable = [];
-    // var today = new Date();
-    // var dd = String(today.getDate()).padStart(2, "0");
-    // var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
-    // today = mm + "," + dd;
     let sum = 0;
     let sumCookHours = 0;
 
     for (let i = 0; i < WaiterArray.length; i++) {
-     
       const date = new Date();
       const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0'); // getMonth() is zero-based
+      const month = String(date.getMonth() + 1).padStart(2, '0');
       const day = String(date.getDate()).padStart(2, '0');
-      var a = new Date(`${year}-${month}-${day}` + " " + WaiterArray[i].houer );
-      var b = new Date(`${year}-${month}-${day}` + " " + WaiterArray[i].toHouer);
-      
-      // Check if end time is before start time, indicating it crosses midnight
+      let a = new Date(`${year}-${month}-${day} ${WaiterArray[i].houer}`);
+      let b = new Date(`${year}-${month}-${day} ${WaiterArray[i].toHouer}`);
+
       if (b < a) {
-        b.setDate(b.getDate() + 1); // Add one day to the end time
+        b.setDate(b.getDate() + 1);
       }
-      
-      var hours = Math.abs(b - a) / 36e5;
-      var wholeHours = Math.floor(hours);
-      var decimals = hours - wholeHours;
-      
-      // Function to round decimals to the nearest 0 or 5 minutes
+
+      let hours = Math.abs(b - a) / 36e5;
+      let wholeHours = Math.floor(hours);
+      let decimals = hours - wholeHours;
+
       function roundToNearestFive(decimals) {
-        const decimalMinutes = Math.round(decimals * 60); // Convert decimals to minutes
-        const roundedMinutes = Math.round(decimalMinutes / 5) * 5; // Round to nearest 5 minutes
-      
+        const decimalMinutes = Math.round(decimals * 60);
+        const roundedMinutes = Math.round(decimalMinutes / 5) * 5;
+
         switch (roundedMinutes) {
-          case 0:
-            return 0.00;
-          case 5:
-            return 0.08;
-          case 10:
-            return 0.17;
-          case 15:
-            return 0.25;
-          case 20:
-            return 0.33;
-          case 25:
-            return 0.41;
-          case 30:
-            return 0.50;
-          case 35:
-            return 0.58;
-          case 40:
-            return 0.67;
-          case 45:
-            return 0.75;
-          case 50:
-            return 0.83;
-          case 55:
-            return 0.91;
-          case 60:
-            return 1.00; // Rounds to the next hour
-          default:
-            return decimals; // Just in case, although all cases should be handled
+          case 0: return 0.00;
+          case 5: return 0.08;
+          case 10: return 0.17;
+          case 15: return 0.25;
+          case 20: return 0.33;
+          case 25: return 0.41;
+          case 30: return 0.50;
+          case 35: return 0.58;
+          case 40: return 0.67;
+          case 45: return 0.75;
+          case 50: return 0.83;
+          case 55: return 0.91;
+          case 60: return 1.00;
+          default: return decimals;
         }
       }
-      
-      // Round the decimals
+
       decimals = roundToNearestFive(decimals);
-      
-      // Add the rounded decimals back to the whole hours
       hours = wholeHours + decimals;
 
       WaiterArray[i].sumHours = hours;
 
-      if (WaiterArray[i].job == "waiter") {
+      if (WaiterArray[i].job === "waiter") {
         sum += hours;
-      } else if (WaiterArray[i].job == "cook") {
-        sumCookHours += hours;
-      }
-
-      if (WaiterArray[i].job == "waiter") {
         arrTable.push(WaiterArray[i]);
-      } else {
+      } else if (WaiterArray[i].job === "cook") {
+        sumCookHours += hours;
         workersTable.push(WaiterArray[i]);
       }
     }
+
     let hafrasha = sum * 6;
     let tipFoeHour = (TipMoney - hafrasha) / sum;
 
@@ -155,9 +122,24 @@ function App() {
     setPopUp({ active: false, txt: "" });
   }
 
+  const handleGenerateAndSendPDF = () => {
+    const columns = [
+      { title: 'שם', field: 'name' },
+      { title: 'משעה', field: 'houer' },
+      { title: 'עד שעה', field: 'toHouer' },
+      { title: 'משך שעות', field: 'sumHours' },
+      { title: 'תפקיד', field: 'job' }
+    ];
+
+    const title = 'טבלת עובדים';
+
+    const pdfBlob = generatePDF(TableWorkersArray, columns, title);
+    sendPDFToWhatsApp(pdfBlob, '1234567890'); // Replace with the recipient's phone number
+  };
+
   return (
     <div className="flexCol center">
-      {PopUpState.active == true ? (
+      {PopUpState.active === true ? (
         <div>
           <PopUp txt={PopUpState.txt} func={clearPopUp} />
         </div>
@@ -177,11 +159,8 @@ function App() {
           list={WaiterArray}
           removeWaiter={removeWaiter}
         />
-
-        {/* <WaiterList list={WaiterArray} removeWaiter={removeWaiter} /> */}
       </div>
       <br />
-
       <div className="w80">
         <TipTable
           TipMoneyForHour={TipMoneyForHour}
@@ -198,11 +177,12 @@ function App() {
       <br />
       <br />
       <br />
-      <ButtonExel/>
+      <ButtonExel func={handleGenerateAndSendPDF} />
+      {/* <button onClick={handleGenerateAndSendPDF}>Generate and Send PDF</button> */}
       <br />
       <br />
       <footer>
-        <h3 >כל הזכויות שמורות לדניאל פיתוח אתרים  &copy;</h3>
+        <h3>כל הזכויות שמורות לדניאל פיתוח אתרים &copy;</h3>
         <br /><br />
       </footer>
     </div>
