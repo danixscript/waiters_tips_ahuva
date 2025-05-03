@@ -20,6 +20,7 @@ function App() {
 
   function waiterFilter(e) {
     let flag = false;
+    console.log(e)
     for (let i = 0; i < WaiterArray.length; i++) {
       if (e.name === WaiterArray[i].name) {
         flag = true;
@@ -27,7 +28,7 @@ function App() {
         return;
       }
     }
-    if (e.name === "" || e.houer === "" || e.toHouer === "") {
+    if (e.name === "" || e.houer === "" || e.toHouer === "" || e.job == "") {
       flag = true;
       setPopUp({ active: true, txt: "נא למלא את כל הפרטים" });
       return;
@@ -182,8 +183,8 @@ function App() {
       <br />
       <br />
       <footer>
-        <h3>כל הזכויות שמורות לדניאל פיתוח אתרים &copy;</h3>
-        <br /><br />
+        {/* <h3>כל הזכויות שמורות לדניאל פיתוח אתרים &copy;</h3>
+        <br /><br /> */}
       </footer>
     </div>
   );
