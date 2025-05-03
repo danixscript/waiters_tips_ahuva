@@ -6,11 +6,39 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import generatePDF from './GeneratePDF';
+import Button from '@mui/material/Button';
+
 import { useState } from "react";
 import "../App.css";
 
 function TipTable(props) {
   const [Rows, setRows] = useState([]);
+  const handleDownloadPDF = () => {
+    const columns = [
+      { title: 'סכום כסף', field: 'money' },
+      { title: 'שם המלצר', field: 'name' },
+      { title: 'משעה', field: 'houer' },
+      { title: 'עד שעה', field: 'toHouer' },
+      { title: 'משך שעות', field: 'sumHours' },
+      { title: 'סכום כסף', field: 'money2' }
+    ];
+  
+    const title = 'טבלת טיפים';
+  
+    const data = props.array.map(row => ({
+      money: Math.floor(props.TipMoneyForHour * row.sumHours),
+      name: row.name,
+      houer: row.houer,
+      toHouer: row.toHouer,
+      sumHours: row.sumHours.toFixed(2),
+      money2: Math.floor(props.TipMoneyForHour * row.sumHours),
+    }));
+  
+    generatePDF(data, columns, title); // קריאה פשוטה, לא צריך להחזיר blob
+  };
+  
+  
   return (
     <TableContainer component={Paper}>
       <h2>טבלת טיפים</h2>
@@ -66,6 +94,10 @@ function TipTable(props) {
           ))}
         </TableBody>
       </Table>
+      <Button variant="contained" color="primary" onClick={handleDownloadPDF}>
+  Download PDF
+</Button>
+
     </TableContainer>
   );
 }
